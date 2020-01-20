@@ -18,7 +18,7 @@ final class PhabricatorTranslationSetting
   }
 
   public function getSettingDefaultValue() {
-    return 'en_US';
+    return 'fr_FR';
   }
 
   protected function getControlInstructions() {
