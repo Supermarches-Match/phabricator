@@ -32,7 +32,7 @@ final class DiffusionPatternSearchView extends DiffusionView {
 
       $matches = null;
       $count = @preg_match_all(
-        '('.$pattern.')u',
+        '('.$pattern.')ui',
         $string,
         $matches,
         PREG_OFFSET_CAPTURE);
