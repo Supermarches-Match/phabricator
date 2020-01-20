@@ -134,7 +134,7 @@ final class PhabricatorEnv extends Phobject {
 
     // TODO: Add a "locale.default" config option once we have some reasonable
     // defaults which aren't silly nonsense.
-    self::setLocaleCode('en_US');
+    self::setLocaleCode('fr_FR');
 
     // Load the preamble utility library if we haven't already. On web
     // requests this loaded earlier, but we want to load it for non-web
