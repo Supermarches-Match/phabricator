@@ -1,0 +1,4 @@
+[submodule "extensions"]
+	path = src/extensions
+	url = ssh://git@it-prod-eu-phabricator.intramatch.eu/source/Phabricator-extension.git
+	branch = develop
