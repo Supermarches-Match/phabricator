@@ -30,13 +30,13 @@ final class PhutilRemarkupSimpleTableBlockRule extends PhutilRemarkupBlockRule {
       preg_match_all(
         '/\|'.
         '('.
-          '(?:'.
-            '(?:\\[\\[.*?\\]\\])'. // [[ ... | ... ]], a link
-            '|'.
-              '(?:[^|[]+)'.          // Anything but "|" or "[".
-            '|'.
-              '(?:\\[[^\\|[])'.      // "[" followed by anything but "[" or "|"
-          ')*'.
+        '(?:'.
+        '(?:\\[\\[.*?\\]\\])'. // [[ ... | ... ]], a link
+        '|'.
+        '(?:[^|[]+)'.          // Anything but "|" or "[".
+        '|'.
+        '(?:\\[[^\\|[])'.      // "[" followed by anything but "[" or "|"
+        ')*'.
         ')/', $line, $matches);
 
       $any_header = false;
@@ -62,7 +62,26 @@ final class PhutilRemarkupSimpleTableBlockRule extends PhutilRemarkupBlockRule {
           }
         }
 
-        $cells[] = array('type' => 'td', 'content' => $this->applyRules($cell));
+        $cellArray = array('type' => 'td');
+
+        //Attributes
+        $result = array();
+        if (preg_match('/^{((?:(?:colspan|rowspan|color|bgcolor)=(?:#?\w+)(?:,\s)?)+)}/', $cell, $result)) {
+          $cell = str_replace($result[0], '', $cell);
+
+          $attrs = array();
+          preg_match_all('/(?:((colspan|rowspan|color|bgcolor)=(#?\w+))+)/', $result[1], $attrs);
+          $i = 0;
+          foreach ($attrs[2] as $attr) {
+            if ($attr === 'colspan' || $attr === 'rowspan' || $attr === 'color' || $attr === 'bgcolor') {
+              $cellArray[$attr] = $attrs[3][$i];
+            }
+            $i++;
+          }
+        }
+
+        $cellArray['content'] = $this->applyRules($cell);
+        $cells[] = $cellArray;
       }
 
       $is_header = ($any_header && !$any_content);
