@@ -135,10 +135,27 @@ final class PhutilRemarkupTableBlockRule extends PhutilRemarkupBlockRule {
           phutil_tag('br'),
           $lines);
 
-        $cell_specs[] = array(
+        $cell_spec = array(
           'type' => $cell->getTagName(),
           'content' => $content,
         );
+
+        if (count($cell->getAttributes()) > 0) {
+          if (isset($cell->getAttributes()['colspan'])) {
+            $cell_spec['colspan'] = $cell->getAttributes()['colspan'];
+          }
+          if (isset($cell->getAttributes()['rowspan'])) {
+            $cell_spec['rowspan'] = $cell->getAttributes()['rowspan'];
+          }
+          if (isset($cell->getAttributes()['bgcolor'])) {
+            $cell_spec['bgcolor'] = $cell->getAttributes()['bgcolor'];
+          }
+          if (isset($cell->getAttributes()['color'])) {
+            $cell_spec['color'] = $cell->getAttributes()['color'];
+          }
+        }
+
+        $cell_specs[] = $cell_spec;
       }
 
       $row_specs[] = array(
