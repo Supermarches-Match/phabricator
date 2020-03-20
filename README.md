@@ -63,4 +63,4 @@ example :
     | {color=red} test2 | {colspan=3, bgcolor=green} **test22**
 ```
 
-![result](https://imgur.com/Dc7uc4R)
+![result](https://i.imgur.com/Dc7uc4R.png)
