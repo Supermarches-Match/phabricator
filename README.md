@@ -35,6 +35,7 @@ This repository is a fork of official Phacility, with some add-on that can not b
 Supermarches Match does not provide support for this version and cannot be held responsible for the use of this version
 
 **ADD ON**
+- Search in repositories are case insensitive
 - Remarkup for table has new option :
   - merged columns with colspan
   - merged line with rowspan
