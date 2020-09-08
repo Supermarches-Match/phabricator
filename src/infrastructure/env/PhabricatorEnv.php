@@ -495,7 +495,7 @@ final class PhabricatorEnv extends Phobject {
     );
 
     $uri = new PhutilURI(
-      'https://secure.phabricator.com/diviner/find/',
+      'https://it-prod-eu-phabricator.intramatch.eu/w/phabricator/mise_en_page_wiki/',
       $params);
 
     return phutil_string_cast($uri);
