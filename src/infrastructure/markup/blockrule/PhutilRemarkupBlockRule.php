@@ -132,6 +132,7 @@ abstract class PhutilRemarkupBlockRule extends Phobject {
     }
 
     if ($this->getEngine()->isHTMLMailMode()) {
+      $isHtmlMail = true;
       $table_attributes = array(
         'style' => 'border-collapse: separate;
           border-spacing: 1px;
@@ -143,6 +144,7 @@ abstract class PhutilRemarkupBlockRule extends Phobject {
           padding: 3px 6px;',
       );
     } else {
+      $isHtmlMail = false;
       $table_attributes = array(
         'class' => 'remarkup-table',
       );
@@ -154,6 +156,9 @@ abstract class PhutilRemarkupBlockRule extends Phobject {
     foreach ($out_rows as $row) {
       $cells = array();
       foreach ($row['content'] as $cell) {
+        if(!$isHtmlMail){
+          $cell_attributes = $this->renderAttributes($cell);
+        }
         $cells[] = phutil_tag(
           $cell['type'],
           $cell_attributes,
@@ -165,6 +170,29 @@ abstract class PhutilRemarkupBlockRule extends Phobject {
 
     $table = phutil_tag('table', $table_attributes, $out);
     return phutil_tag_div('remarkup-table-wrap', $table);
+  }
+
+  private function renderAttributes($cell) {
+    $cell_attributes = array();
+    if (isset($cell['colspan'])) {
+      $cell_attributes['colspan'] = $cell['colspan'];
+    }
+
+    if (isset($cell['rowspan'])) {
+      $cell_attributes['rowspan'] = $cell['rowspan'];
+    }
+
+    $style = null;
+    if (isset($cell['color'])) {
+      $style = $style.'color: '.$cell['color']."; ";
+    }
+    if (isset($cell['bgcolor'])) {
+      $style = $style.'background-color: '.$cell['bgcolor'].";";
+    }
+    if ($style != null) {
+      $cell_attributes['style'] = $style;
+    }
+    return $cell_attributes;
   }
 
 }

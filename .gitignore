@@ -1,6 +1,9 @@
 # NOTE: Thinking about adding files created by your operating system, IDE,
 # or text editor here? Don't! Add them to your per-user .gitignore instead.
 
+#IDE
+/.idea/
+
 # Diviner
 /docs/
 /.divinercache/

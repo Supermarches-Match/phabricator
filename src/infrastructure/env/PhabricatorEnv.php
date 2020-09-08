@@ -134,7 +134,7 @@ final class PhabricatorEnv extends Phobject {
 
     // TODO: Add a "locale.default" config option once we have some reasonable
     // defaults which aren't silly nonsense.
-    self::setLocaleCode('en_US');
+    self::setLocaleCode('fr_FR');
 
     // Load the preamble utility library if we haven't already. On web
     // requests this loaded earlier, but we want to load it for non-web
@@ -495,7 +495,7 @@ final class PhabricatorEnv extends Phobject {
     );
 
     $uri = new PhutilURI(
-      'https://secure.phabricator.com/diviner/find/',
+      'https://it-prod-eu-phabricator.intramatch.eu/w/phabricator/mise_en_page_wiki/',
       $params);
 
     return phutil_string_cast($uri);

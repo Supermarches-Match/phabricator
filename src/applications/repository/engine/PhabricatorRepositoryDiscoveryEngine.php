@@ -290,13 +290,13 @@ final class PhabricatorRepositoryDiscoveryEngine
     $remote_root = (string)($xml->entry[0]->repository[0]->root[0]);
     $expect_root = $repository->getSubversionPathURI();
 
-    $normal_type_svn = PhabricatorRepositoryURINormalizer::TYPE_SVN;
+    $normal_type_svn = ArcanistRepositoryURINormalizer::TYPE_SVN;
 
-    $remote_normal = id(new PhabricatorRepositoryURINormalizer(
+    $remote_normal = id(new ArcanistRepositoryURINormalizer(
       $normal_type_svn,
       $remote_root))->getNormalizedPath();
 
-    $expect_normal = id(new PhabricatorRepositoryURINormalizer(
+    $expect_normal = id(new ArcanistRepositoryURINormalizer(
       $normal_type_svn,
       $expect_root))->getNormalizedPath();
 
@@ -839,6 +839,13 @@ final class PhabricatorRepositoryDiscoveryEngine
       }
 
       $seen[$target_identifier] = true;
+
+      // See PHI1688. If this commit is already marked as unreachable, we don't
+      // need to consider its ancestors. This may skip a lot of work if many
+      // branches with a lot of shared ancestry are deleted at the same time.
+      if ($target->isUnreachable()) {
+        continue;
+      }
 
       try {
         $stream->getCommitDate($target_identifier);

@@ -292,7 +292,6 @@ final class DiffusionBrowseController extends DiffusionController {
 
     $empty_result = null;
     $browse_panel = null;
-    $branch_panel = null;
     if (!$results->isValidResults()) {
       $empty_result = new DiffusionEmptyResultView();
       $empty_result->setDiffusionRequest($drequest);
@@ -328,12 +327,6 @@ final class DiffusionBrowseController extends DiffusionController {
         ->setTable($browse_table)
         ->addClass('diffusion-mobile-view')
         ->setPager($pager);
-
-      $path = $drequest->getPath();
-      $is_branch = (!strlen($path) && $repository->supportsBranchComparison());
-      if ($is_branch) {
-        $branch_panel = $this->buildBranchTable();
-      }
     }
 
     $open_revisions = $this->buildOpenRevisions();
@@ -359,7 +352,6 @@ final class DiffusionBrowseController extends DiffusionController {
       ->setFooter(
         array(
           $bar,
-          $branch_panel,
           $empty_result,
           $browse_panel,
           $open_revisions,
@@ -472,14 +464,21 @@ final class DiffusionBrowseController extends DiffusionController {
     $viewer = $this->getViewer();
     $base_uri = $this->getRequest()->getRequestURI();
 
-    $user = $this->getRequest()->getUser();
     $repository = $drequest->getRepository();
     $path = $drequest->getPath();
     $line = nonempty((int)$drequest->getLine(), 1);
     $buttons = array();
 
-    $editor_link = $user->loadEditorLink($path, $line, $repository);
-    $template = $user->loadEditorLink($path, '%l', $repository);
+    $editor_uri = null;
+    $editor_template = null;
+
+    $link_engine = PhabricatorEditorURIEngine::newForViewer($viewer);
+    if ($link_engine) {
+      $link_engine->setRepository($repository);
+
+      $editor_uri = $link_engine->getURIForPath($path, $line);
+      $editor_template = $link_engine->getURITokensForPath($path);
+    }
 
     $buttons[] =
       id(new PHUIButtonView())
@@ -493,16 +492,16 @@ final class DiffusionBrowseController extends DiffusionController {
             )))
         ->setIcon('fa-backward');
 
-    if ($editor_link) {
+    if ($editor_uri) {
       $buttons[] =
         id(new PHUIButtonView())
           ->setTag('a')
           ->setText(pht('Open File'))
-          ->setHref($editor_link)
+          ->setHref($editor_uri)
           ->setIcon('fa-pencil')
           ->setID('editor_link')
-          ->setMetadata(array('link_template' => $template))
-          ->setDisabled(!$editor_link)
+          ->setMetadata(array('template' => $editor_template))
+          ->setDisabled(!$editor_uri)
           ->setColor(PHUIButtonView::GREY);
     }
 
@@ -1065,61 +1064,6 @@ final class DiffusionBrowseController extends DiffusionController {
     }
 
     return $file;
-  }
-
-  private function buildBranchTable() {
-    $viewer = $this->getViewer();
-    $drequest = $this->getDiffusionRequest();
-    $repository = $drequest->getRepository();
-
-    $branch = $drequest->getBranch();
-    $default_branch = $repository->getDefaultBranch();
-
-    if ($branch === $default_branch) {
-      return null;
-    }
-
-    $pager = id(new PHUIPagerView())
-      ->setPageSize(10);
-
-    try {
-      $results = $this->callConduitWithDiffusionRequest(
-        'diffusion.historyquery',
-        array(
-          'commit' => $branch,
-          'against' => $default_branch,
-          'path' => $drequest->getPath(),
-          'offset' => $pager->getOffset(),
-          'limit' => $pager->getPageSize() + 1,
-        ));
-    } catch (Exception $ex) {
-      return null;
-    }
-
-    $history = DiffusionPathChange::newFromConduit($results['pathChanges']);
-    $history = $pager->sliceResults($history);
-
-    if (!$history) {
-      return null;
-    }
-
-    $history_table = id(new DiffusionHistoryTableView())
-      ->setViewer($viewer)
-      ->setDiffusionRequest($drequest)
-      ->setHistory($history)
-      ->setParents($results['parents'])
-      ->setFilterParents(true)
-      ->setIsHead(true)
-      ->setIsTail(!$pager->getHasMorePages());
-
-    $header = id(new PHUIHeaderView())
-      ->setHeader(pht('%s vs %s', $branch, $default_branch));
-
-    return id(new PHUIObjectBoxView())
-      ->setHeader($header)
-      ->setBackground(PHUIObjectBoxView::BLUE_PROPERTY)
-      ->addClass('diffusion-mobile-view')
-      ->setTable($history_table);
   }
 
 }

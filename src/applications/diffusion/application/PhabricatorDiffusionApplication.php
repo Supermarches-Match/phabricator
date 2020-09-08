@@ -52,7 +52,6 @@ final class PhabricatorDiffusionApplication extends PhabricatorApplication {
         'change/(?P<dblob>.*)' => 'DiffusionChangeController',
         'clone/' => 'DiffusionCloneController',
         'history/(?P<dblob>.*)' => 'DiffusionHistoryController',
-        'graph/(?P<dblob>.*)' => 'DiffusionGraphController',
         'browse/(?P<dblob>.*)' => 'DiffusionBrowseController',
         'document/(?P<dblob>.*)'
           => 'DiffusionDocumentController',
@@ -140,8 +139,6 @@ final class PhabricatorDiffusionApplication extends PhabricatorApplication {
 
         'inline/' => array(
           'edit/(?P<phid>[^/]+)/' => 'DiffusionInlineCommentController',
-          'preview/(?P<phid>[^/]+)/'
-            => 'DiffusionInlineCommentPreviewController',
         ),
         'services/' => array(
           'path/' => array(

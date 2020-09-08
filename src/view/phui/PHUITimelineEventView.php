@@ -516,10 +516,10 @@ final class PHUITimelineEventView extends AphrontView {
       $outer_classes[] = 'phui-timeline-'.$color;
     }
 
-    $sigil = null;
+    $sigils = array();
     $meta = null;
     if ($this->getTransactionPHID()) {
-      $sigil = 'transaction';
+      $sigils[] = 'transaction';
       $meta = array(
         'phid' => $this->getTransactionPHID(),
         'anchor' => $this->anchor,
@@ -534,17 +534,17 @@ final class PHUITimelineEventView extends AphrontView {
           'class' => 'phui-timeline-event-view '.
                      'phui-timeline-spacer '.
                      'phui-timeline-spacer-bold',
-          '',
         ));
     }
+
+    $sigils[] = 'anchor-container';
 
     return array(
       javelin_tag(
         'div',
         array(
           'class' => implode(' ', $outer_classes),
-          'id' => $this->anchor ? 'anchor-'.$this->anchor : null,
-          'sigil' => $sigil,
+          'sigil' => implode(' ', $sigils),
           'meta' => $meta,
         ),
         phutil_tag(
@@ -591,7 +591,7 @@ final class PHUITimelineEventView extends AphrontView {
       }
 
       if ($date_created) {
-        $date = phabricator_datetime(
+        $date = phabricator_dual_datetime(
           $date_created,
           $this->getUser());
         if ($this->anchor) {
@@ -611,6 +611,7 @@ final class PHUITimelineEventView extends AphrontView {
               $date),
           );
         }
+
         $extra[] = $date;
       }
 
@@ -705,7 +706,7 @@ final class PHUITimelineEventView extends AphrontView {
       $items[] = id(new PhabricatorActionView())
         ->setIcon('fa-code')
         ->setHref('/transactions/raw/'.$xaction_phid.'/')
-        ->setName(pht('View Remarkup'))
+        ->setName(pht('View Raw Remarkup'))
         ->addSigil('transaction-raw')
         ->setMetadata(
           array(

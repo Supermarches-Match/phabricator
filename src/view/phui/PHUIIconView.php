@@ -57,6 +57,15 @@ final class PHUIIconView extends AphrontTagView {
     return $this;
   }
 
+  public function setColor($color) {
+    $this->iconColor = $color;
+    return $this;
+  }
+
+  public function getIconName() {
+    return $this->iconFont;
+  }
+
   public function setBackground($color) {
     $this->iconBackground = $color;
     return $this;
