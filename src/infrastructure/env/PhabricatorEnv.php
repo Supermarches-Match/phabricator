@@ -494,9 +494,23 @@ final class PhabricatorEnv extends Phobject {
       'jump' => true,
     );
 
-    $uri = new PhutilURI(
-      'https://it-prod-eu-phabricator.intramatch.eu/w/phabricator/mise_en_page_wiki/',
-      $params);
+    $uri = null;
+    switch ($resource){
+      case 'Search User Guide':
+        $uri = new PhutilURI(
+          'https://it-prod-eu-phabricator.intramatch.eu/w/phabricator/recherche_avancee/',
+          $params);
+        break;
+      case 'Remarkup Reference':
+        $uri = new PhutilURI(
+          'https://it-prod-eu-phabricator.intramatch.eu/w/phabricator/mise_en_page_wiki/',
+          $params);
+        break;
+      default:
+        $uri = new PhutilURI(
+          'https://secure.phabricator.com/diviner/find/',
+          $params);
+    }
 
     return phutil_string_cast($uri);
   }
