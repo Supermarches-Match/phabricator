@@ -17,7 +17,9 @@ abstract class PhabricatorObjectRemarkupRule extends PhutilRemarkupRule {
 
   protected function getObjectNamePrefixBeginsWithWordCharacter() {
     $prefix = $this->getObjectNamePrefix();
-    return preg_match('/^\w/', $prefix);
+    //return preg_match('/^\w/', $prefix);
+    //Changing partern to begin by ( and end by ) to avoid referencing object if it's not needed
+    return false;
   }
 
   protected function getObjectIDPattern() {
@@ -233,7 +235,7 @@ abstract class PhabricatorObjectRemarkupRule extends PhutilRemarkupRule {
       // in the middle of words.
 
       $this->referencePattern =
-        '((?<![#@-])'.$boundary.$prefix.'('.$id.')(?:#([-\w\d]+))?(?!\w))u';
+        '((?<![#@-])'.$boundary.'\[\['.$prefix.'('.$id.')(?:#([-\w\d]+))?\]\](?!\w))u';
     }
 
     return $this->referencePattern;
