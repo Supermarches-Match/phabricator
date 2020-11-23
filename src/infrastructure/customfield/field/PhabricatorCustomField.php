@@ -36,6 +36,9 @@ abstract class PhabricatorCustomField extends Phobject {
   const ROLE_EDITENGINE = 'EditEngine';
   const ROLE_HERALDACTION = 'herald.action';
   const ROLE_EXPORT = 'export';
+  const ROLE_TASKCARD                 = 'taskcard';
+  const ROLE_TASKHEADER               = 'taskheader';
+
 
 
 /* -(  Building Applications with Custom Fields  )--------------------------- */
@@ -117,7 +120,6 @@ abstract class PhabricatorCustomField extends Phobject {
 
     return idx($fields, $field_key);
   }
-
 
   /**
    * @task apps
@@ -315,6 +317,10 @@ abstract class PhabricatorCustomField extends Phobject {
                $this->shouldAppearInEditEngine();
       case self::ROLE_EXPORT:
         return $this->shouldAppearInDataExport();
+      case self::ROLE_TASKCARD:
+        return $this->shouldAppearInTaskCard();
+      case self::ROLE_TASKHEADER:
+        return $this->shouldAppearInTaskHeader();
       case self::ROLE_DEFAULT:
         return true;
       default:
@@ -1710,4 +1716,40 @@ abstract class PhabricatorCustomField extends Phobject {
     return $fields;
   }
 
+  /* -(  Tag Task Card displaying  )------------------------------------------- */
+  public function shouldAppearInTaskCard() {
+    if ($this->proxy) {
+      return $this->proxy->shouldAppearInTaskCard();
+    }
+    return false;
+  }
+
+  /**
+   * @task view
+   */
+  public function renderTaskCardValue() {
+    if ($this->proxy) {
+      return $this->proxy->renderTaskCardValue();
+    }
+    throw new PhabricatorCustomFieldImplementationIncompleteException($this);
+  }
+
+  /* -(  Tag  Task HEader displaying  )----------------------------------------- */
+  public function shouldAppearInTaskHeader() {
+    if ($this->proxy) {
+      return $this->proxy->shouldAppearInTaskHeader();
+    }
+    return false;
+  }
+
+  /**
+   * @task view
+   */
+  public function renderTaskHeaderValue() {
+    if ($this->proxy) {
+      return $this->proxy->renderTaskHeaderValue();
+    }
+    throw new PhabricatorCustomFieldImplementationIncompleteException($this);
+  }
 }
+

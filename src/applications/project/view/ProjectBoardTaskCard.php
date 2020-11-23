@@ -15,6 +15,7 @@ final class ProjectBoardTaskCard extends Phobject {
     $this->viewer = $viewer;
     return $this;
   }
+
   public function getViewer() {
     return $this->viewer;
   }
@@ -50,6 +51,7 @@ final class ProjectBoardTaskCard extends Phobject {
     $this->task = $task;
     return $this;
   }
+
   public function getTask() {
     return $this->task;
   }
@@ -58,6 +60,7 @@ final class ProjectBoardTaskCard extends Phobject {
     $this->owner = $owner;
     return $this;
   }
+
   public function getOwner() {
     return $this->owner;
   }
@@ -139,6 +142,19 @@ final class ProjectBoardTaskCard extends Phobject {
           ->setName($points)
           ->addClass('phui-workcard-points');
         $card->addAttribute($points_tag);
+      }
+    }
+
+    $fields = PhabricatorCustomField::getObjectFields($task, PhabricatorCustomField::ROLE_TASKCARD);
+    if ($fields) {
+      $fields->setViewer($this->getViewer());
+      $fields->readFieldsFromStorage($task);
+
+      foreach ($fields->getFields() as $field) {
+        $tag = $field->renderTaskCardValue();
+        if($tag !== null) {
+          $card->addAttribute($tag);
+        }
       }
     }
 

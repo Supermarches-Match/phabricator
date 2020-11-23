@@ -240,6 +240,19 @@ final class ManiphestTaskDetailController extends ManiphestController {
       }
     }
 
+    $fields = PhabricatorCustomField::getObjectFields($task, PhabricatorCustomField::ROLE_TASKHEADER);
+    if ($fields) {
+      $fields->setViewer($this->getViewer());
+      $fields->readFieldsFromStorage($task);
+
+      foreach ($fields->getFields() as $field) {
+        $tag = $field->renderTaskHeaderValue();
+        if($tag !== null) {
+          $view->addTag($tag);
+        }
+      }
+    }
+
     $subtype = $task->newSubtypeObject();
     if ($subtype && $subtype->hasTagView()) {
       $subtype_tag = $subtype->newTagView();

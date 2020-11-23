@@ -36,7 +36,64 @@ Supermarches Match does not provide support for this version and cannot be held 
 
 **ADD ON**
 - Search in repositories are case insensitive
-- Remarkup for table has new option :
+- Possibility to display CustomField in CardTask:
+  - By code added to your class extended by ManiphestCustomField and customise PHUITagView
+  - Or add options on fields defined in maniphest.custom-field-definitions
+```
+  public function shouldAppearInTaskCard() {
+    return true;
+  }
+
+  public function renderTaskCardValue() {
+    if (!strlen($this->getFieldValue())) {
+      return null;
+    }
+
+    return id(new PHUITagView())
+      ->setType(PHUITagView::TYPE_SHADE)
+      ->setColor(PHUITagView::COLOR_GREY)
+      ->setSlimShady(true)
+      ->setName($this->getFieldValue())
+      ->addClass('phui-workcard-points');
+  }
+```
+
+```
+    "taskcard.enable": true,
+    "taskcard.type": "outline",
+    "taskcard.color": "blue",
+    "taskcard.class": "phui-workcard-points"
+```
+
+- Possibility to display CustomField in task header:
+  - By code added to your class extended by ManiphestCustomField and customise PHUITagView
+  - Or add options on fields defined in maniphest.custom-field-definitions
+```
+  public function shouldAppearInTaskHeader() {
+    return true;
+  }
+
+  public function renderTaskHeaderValue() {
+    if (!strlen($this->getFieldValue())) {
+      return null;
+    }
+
+    return id(new PHUITagView())
+      ->setType(PHUITagView::TYPE_SHADE)
+      ->setColor(PHUITagView::COLOR_GREY)
+      ->setName($this->getFieldValue())
+      ->addClass('phui-workcard-points');
+  }
+```
+
+```
+    "taskheader.enable": true,
+    "taskheader.type": "outline",
+    "taskheader.color": "blue",
+    "taskheader.class": "phui-workcard-points"
+```
+
+- Remarkup for table has new option:
   - merged columns with colspan
   - merged line with rowspan
   - colorised cell text with color (you can use color name or css format with #)

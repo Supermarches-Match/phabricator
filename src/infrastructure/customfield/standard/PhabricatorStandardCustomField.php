@@ -514,4 +514,44 @@ abstract class PhabricatorStandardCustomField
     return $this->getFieldValue();
   }
 
+  public function shouldAppearInTaskCard() {
+    return $this->getFieldConfigValue('taskcard.enable', false);
+  }
+
+  public function renderTaskCardValue() {
+    return null;
+  }
+
+  public function getTaskCardType() {
+    return $this->getFieldConfigValue('taskcard.type', PHUITagView::TYPE_OUTLINE);
+  }
+
+  public function getTaskCardColor() {
+    return $this->getFieldConfigValue('taskcard.color', PHUITagView::COLOR_DISABLED);
+  }
+
+  public function getTaskCardClass() {
+    return $this->getFieldConfigValue('taskcard.class', '');
+  }
+
+  public function shouldAppearInTaskHeader() {
+    return $this->getFieldConfigValue('taskheader.enable', false);
+  }
+
+  public function renderTaskHeaderValue() {
+    return null;
+  }
+
+  public function getTaskHeaderType() {
+    return $this->getFieldConfigValue('taskheader.type', PHUITagView::TYPE_OUTLINE);
+  }
+
+  public function getTaskHeaderColor() {
+    return $this->getFieldConfigValue('taskheader.color', PHUITagView::COLOR_DISABLED);
+  }
+
+  public function getTaskHeaderClass() {
+    return $this->getFieldConfigValue('taskheader.class', '');
+  }
+
 }

@@ -158,4 +158,39 @@ final class PhabricatorStandardCustomFieldSelect
       ->setOptions($this->getOptions());
   }
 
+  public function renderTaskCardValue() {
+    if (!strlen($this->getFieldValue())) {
+      return null;
+    }
+
+    $value = idx($this->getOptions(), $this->getFieldValue());
+    if (!strlen($value)) {
+      return null;
+    }
+
+    return id(new PHUITagView())
+      ->setType($this->getTaskCardType())
+      ->setColor($this->getTaskCardColor())
+      ->setSlimShady(true)
+      ->addClass($this->getTaskCardClass())
+      ->setName($value);
+  }
+
+  public function renderTaskHeaderValue() {
+    if (!strlen($this->getFieldValue())) {
+      return null;
+    }
+
+    $value = idx($this->getOptions(), $this->getFieldValue());
+    if (!strlen($value)) {
+      return null;
+    }
+
+    return id(new PHUITagView())
+      ->setType($this->getTaskHeaderType())
+      ->setColor($this->getTaskHeaderColor())
+      ->addClass($this->getTaskHeaderClass())
+      ->setName($value);
+  }
+
 }
