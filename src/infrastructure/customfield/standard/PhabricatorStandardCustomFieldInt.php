@@ -128,4 +128,29 @@ final class PhabricatorStandardCustomFieldInt
     return new PhabricatorIntExportField();
   }
 
+  public function renderTaskCardValue() {
+    if (!strlen($this->getFieldValue())) {
+      return null;
+    }
+
+    return id(new PHUITagView())
+      ->setType($this->getTaskCardType())
+      ->setColor($this->getTaskCardColor())
+      ->setSlimShady(true)
+      ->addClass($this->getTaskCardClass())
+      ->setName($this->getFieldValue());
+  }
+
+  public function renderTaskHeaderValue() {
+    if (!strlen($this->getFieldValue())) {
+      return null;
+    }
+
+    return id(new PHUITagView())
+      ->setType($this->getTaskCardType())
+      ->setColor($this->getTaskCardColor())
+      ->addClass($this->getTaskCardClass())
+      ->setName(pht('%s %s',$this->getFieldValue(), $this->getFieldName()));
+  }
+
 }
