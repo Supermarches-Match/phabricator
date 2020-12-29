@@ -1,0 +1,13 @@
+<?php
+/**
+ * TranslateWiki Locale for French (French) localization in Phabricator
+ */
+final class TranslateWikiFrenchFr extends PhutilLocale {
+  public function getLocaleCode() {
+    return 'fr';
+  }
+  public function getLocaleName() {
+    return pht('Français');
+  }
+}
+?>

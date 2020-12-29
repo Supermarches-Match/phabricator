@@ -35,7 +35,7 @@
 /support/bin/*
 
 # User extensions
-/src/extensions/*
+#/src/extensions/*
 
 # NPM local packages
 /support/aphlict/server/node_modules/
