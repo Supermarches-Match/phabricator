@@ -193,6 +193,7 @@ final class PhabricatorManiphestFrFR
       '%s changed the subtype of this task from "%s" to "%s".' => '%s a changé le sous-type de cette tâche de "%s" à "%s".',
       '%s merged %s task(s) %s into %s.' => '%s a fusionné %s tâche(s) %s dans %s.',
       '%s merged task %s into %s.' => '%s a fusionné la tâche %s dans %s.',
+      '%s added a comment to %s.' => '%s a ajouté un commentaire à %s.',
 
       /*
       'Key "%s" is not a valid status constant. Status constants must be 1-64 alphanumeric characters and cannot be exclusively digits. For example, "%s" or "%s" are reasonable choices.' => 'Key "%s" is not a valid status constant. Status constants must be 1-64 alphanumeric characters and cannot be exclusively digits. For example, "%s" or "%s" are reasonable choices.',
